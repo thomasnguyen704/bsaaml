@@ -1,0 +1,28 @@
+{
+  "name": "bsaamlpoc",
+  "version": "1.0.0",
+  "description": "poc for bsa",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasnguyen704/bsaamlpoc.git"
+  },
+  "keywords": [
+    "BSA",
+    "AML",
+    "POC"
+  ],
+  "author": "Thomas Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomasnguyen704/bsaamlpoc/issues"
+  },
+  "homepage": "https://github.com/thomasnguyen704/bsaamlpoc#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

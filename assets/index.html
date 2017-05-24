@@ -1,0 +1,385 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Proof of Concept: BSA AML Workstation</title>
+	<link rel="stylesheet" href="css/foundation.css" />
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.foundation.min.css" />
+	<style>
+		.scroll-box { height: 350px; overflow: scroll; overflow-x: hidden; }
+		.card { padding: 20px; }
+		.jumbotron { background-color: yellowgreen; color: white; min-height: 60vh; padding-top: 5%; padding-bottom: 5%; }
+		.jumbotron h1 { font-family: 'Source Sans Pro', sans-serif;	font-size: 5em;	font-weight: 800; }
+		.sticky { width: 100%; }
+		nav * { background-color: yellowgreen !important; color: white; }
+		footer {  min-height: 35vh; margin-top: 25%; padding-top: 2%; padding-bottom: 2%; background-color: ghostwhite; color: dimgrey; }
+		hr { margin-top: 6%;}
+		.columns h3 {margin-top: 80px;}
+		#geoChart1, #geoChart2 { height: 50vh; }
+	</style>
+</head>
+<body>
+	<div id="nav" class="top-bar-container" data-sticky-container >
+		<div class="sticky" data-sticky data-options="anchor: page; marginTop: 0; stickyOn: small;">
+			<nav>
+				<div class="top-bar">
+					<div class="top-bar-left">
+						<ul class="dropdown menu" data-dropdown-menu>
+							<li class="menu-text"><a href="#nav">BSA & AML Workstation</a></li>
+							<li><a href="#alertPriority">Alert Priority</a></li>
+							<li><a href="#operations">Operations</a></li>
+							<li><a href="#sars">Alerts and SARs</a></li>
+							<li><a href="#geo">Geographics</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<div class="jumbotron text-center">
+		<div class="row">
+			<h1>BSA & AML Workstation</h1>
+			<h3>
+				A proof of concept developed for the Center of Excellence BSA and AML project. This Workstation is a modular developed application designed to explore data around BSA & AML Alerts, Cases, and SARs. Data on this workstation is loaded from a remote source by an API.
+			</h3>
+			<br>
+			<a href="#alertPriority" id="jumboButton" class="button alert large"> Explore </a>
+		</div>
+	</div>
+
+	<br><br>
+
+	<div class="row" id="alertPriority">
+		<div class="large-12 columns"><h3>Assignment of Alerts</h3></div>
+		<div class="large-6 columns">
+			<p>The confidence level reflects the likelihood with which the incident is to become a Suspicous Activity Report (SAR), given the details of the initial observation. It is a risk based filtering approach, in which the activity being reported, paired with other data, such as Know Your Customer (KYC), determines the confidence level. Other factors that contribute to the confidence level can include:</p>
+			<ul>
+				<li>Politically exposed person status</li>
+				<li>Geographical region relating to transaction</li>
+				<li>The appearance of structuring to avoid reporting thresholds</li>
+				<li>Suspicious questions, such as those regarding reporting thresholds</li>
+				<li>Unusual costumer behavior or banking transaction (based on KYC)</li>
+			</ul>
+			<p>The confidence level provides an unopinionated approach of how incidents are routed to investigators.</p>
+		</div>
+		<div class="large-6 columns" id="#alertPrioritizationPie"></div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			<small><table class="display " id="alertPrioritization"></table></small>
+		</div>	
+	</div>
+
+	<hr>
+
+	<div class="row" id="operations">
+		<div class="large-12 columns">
+			<h3>Operations</h3>
+			<p>The operations section of the workstation is intended to be an overview of the current stat of the case management system, with graphical representation of various metrics pertaining to the status of SARs related data. Data obtained through various APIs is brought together to give management an overall view of outstanding alerts, cases, and SARS. With this modular approach metrics can easily be adjusted and added as needed. Below you will find some examples of metrics that can be brought in to the workstation.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-6 columns">
+			<div class="card">
+				<div id="opsChart1"></div>
+			</div>
+			<p>The Open Alerts to Cases graph shows the number of alerts that have been opened and verified as potential cases along with the current open case to be worked. This view provides a look at the current workload from open cases along with the potential upcoming  workload from active alerts.</p>
+		</div>
+		<div class="large-6 columns">
+			<div class="card">
+				<div id="opsChart2"></div>
+			</div>
+			<p>The Age of Outstanding Cases graph gives demonstrates the aging process of the open cases. This view can help spot trends in the aging of outstanding cases and adjust workloads of investigators if necessary.</p>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row" id="sars">
+		<div class="large-12 columns">
+			<h3>Years Between Account Opening and Initial SAR</h3>
+			<p>The Age of Outstanding SARs graph demonstrates the frequency of SARs by time on book. This view can help spot find gaps in our model or assess account behavior.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-12 columns">
+			<div id="initalSar1"></div>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row" id="geo">
+		<div class="large-12 columns">
+			<h3>Geographic View of SARs and Alerts</h3>
+			<p>The Geographic View of SARs and Alerts is a color coded map view demonstrating the location of the accounts associated with opened alerts and SARs. This view can help spot trends in geographic locations of alerts and SARs. The current map is displayed by state, however this can be built to provide a drilled down view to smaller regions such as county.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="large-6 columns">
+			<div id="geoChart1"></div>
+		</div>
+		<div class="large-6 columns">
+			<div id="geoChart2"></div>
+		</div>
+	</div>
+
+	<hr>
+
+	<footer>
+		<small>
+			<div class="row">
+				<div class="large-6 columns">
+					<p>A proof of concept developed for the Center of Excellence BSA AML Project</p>
+				</div>
+				<div class="large-6 columns"></div>
+			</div>
+		</small>
+	</footer>
+
+	<!-- JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/what-input/4.1.3/what-input.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.3.1/js/foundation.min.js"></script>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!--Highcharts -->
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/highcharts-more.js"></script>
+	<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+
+	<script src="https://code.highcharts.com/maps/modules/map.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-all.js"></script>
+	<script src="https://code.highcharts.com/mapdata/countries/us/us-all-all.js"></script>
+
+	<!--https://datatables.net/examples/styling/foundation.html -->
+	<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.foundation.min.js"></script>
+	
+	<script>
+		$(document).foundation();
+
+		$('a').click( function() {
+			$('html, body').animate({
+				scrollTop: $( $.attr(this, 'href') ).offset().top
+			}, 500);
+			return false;
+		});
+
+		/*OPERATIONS*/
+		const opsAlertData = [150, 173, 120];
+		const opsCaseData = [100, 70, 50];
+
+		Highcharts.chart(
+			'opsChart1', {
+			credits: {enabled: false},
+			chart: {type: 'column'},
+			title: {text: 'Open Alerts to Cases'},
+			xAxis: {categories: ['Mar-17','Apr-17','May-17']},
+			yAxis: [{min: 0, title: {text: '# of Items'}}],
+			legend: {shadow: false},
+			tooltip: {shared: true},
+			plotOptions: {
+				column: { grouping: false, shadow: false, borderWidth: 0 }
+			},
+			series: [{
+				name: 'Alerts',
+				color: 'rgba(220,220,220,1)',
+				data: opsAlertData,
+				pointPadding: 0.3,
+				pointPlacement: -0.2
+			}, {
+				name: 'Cases',
+				color: 'rgba(154,205,50,.9)',
+				data: opsCaseData,
+				pointPadding: 0.4,
+				pointPlacement: -0.2
+			}]
+		});
+		// END OPERATIONS
+
+		/**
+		* Get histogram data out of xy data
+		* @param   {Array} data  Array of tuples [x, y]
+		* @param   {Number} step Resolution for the histogram
+		* @returns {Array} Histogram data
+		*/
+		const addOneToElement=(obj, key)=>obj[key]?obj[key]+1:1
+		const betterHistogram=(data, step)=>{
+			const min=data.reduce((p, v)=>p < v ? p : v)
+			const max=data.reduce((p, v)=>p < v ? v : p)
+			const orderMag=max-min
+			const binWidth=orderMag/step
+			
+			const histo=data.reduce((aggr, curr, index)=>{
+				const key =Math.floor((curr-min)/binWidth)
+				const element=Math.floor((min+key)*orderMag)/orderMag
+				return Object.assign({}, aggr, {[element]:addOneToElement(aggr, element)})
+			}, {})
+			return Object.keys(histo).map(val=>[parseFloat(val), histo[val]]).sort((a, b)=>a[0]-b[0])
+		}
+
+		// Histogram Config
+		const histoConfig={
+			chart: {type: 'column'},
+			credits: {enabled: false},
+			xAxis: { gridLineWidth: 1, title: {text: null} },
+			yAxis: [{ title: {text: '# of Items'} }, { opposite: true, title: {text: null} }]
+		}
+		
+		// SAR
+		const timeToSarOptions ={ 
+			title: {text: 'Time to SAR'}, 
+			color: 'yellowgreen', 
+			name: 'Number of Years', 
+			type: 'column', 
+			pointPadding: 0, 
+			groupPadding: 0, 
+			pointPlacement: 'between' 
+		}
+		axios.get("/timeToSar").then((response)=>{
+			//console.log(betterHistogram(response.data, 10))
+			Highcharts.chart( 'initalSar1',  Object.assign({}, histoConfig, {
+				title: {text: null}, 
+				legend: {enabled: false},
+				series:[Object.assign({}, timeToSarOptions, { data:betterHistogram(response.data, 10)})]
+			})); 
+		}).catch((err)=>console.log(err));
+
+		// Histogram 2
+		const ageOfCasesOptions={ 
+			title: {text: 'Age of Cases'}, 
+			color: 'yellowgreen', 
+			name: 'Number of Days', 
+			type: 'column', 
+			pointPadding: 0, 
+			groupPadding: 0, 
+			pointPlacement: 'between' 
+		}
+		axios.get("/ageOfCases").then((response)=>{
+			Highcharts.chart( 'opsChart2', 	Object.assign({}, histoConfig, { 
+				title: {text: 'Age of Outstanding Cases'},
+				legend: {enabled: false},
+				series:[Object.assign( {}, ageOfCasesOptions, {	data:betterHistogram(response.data, 10) })] 
+			})); 
+		}).catch((err)=>console.log(err));
+
+
+		/* 
+		*  Instanciate the map 
+		*  Data parsed from http://www.bls.gov/lau/#tables 
+		*/
+		$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=us-counties-unemployment.json&callback=?', function (data) {
+			var countiesMap = Highcharts.geojson(Highcharts.maps['countries/us/us-all-all']), lines = Highcharts.geojson(Highcharts.maps['countries/us/us-all-all'], 'mapline'), options;
+			// Add state acronym for tooltip
+			Highcharts.each(countiesMap, function (mapPoint) {
+				mapPoint.name = mapPoint.name + ', ' + mapPoint.properties['hc-key'].substr(3, 2).toUpperCase();
+			});
+			options = {
+				chart: { marginBottom: 125 /* for the legend*/ },
+				credits: false,
+				title: { text: 'Percentage of Accounts with an Alert' },
+				legend: {
+					title: { text: '% Accounts with an Alert', style: { color: (Highcharts.theme && Highcharts.theme.textColor) || 'black' } },
+					layout: 'horizontal',  floating: true, valueDecimals: 0, valueSuffix: '%',
+					backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255, 255, 255, 0.85)', symbolRadius: 0, symbolHeight: 14
+				},
+				mapNavigation: { enabled: true,  enableButtons: false },
+				colorAxis: {dataClasses: [{ from: 0, to: 4, color: "silver" },{ from: 4, to: 8, color: "salmon" },{ from: 8, to: 10, color: "crimson" },{ from: 10, color: "darkred" }]},
+				plotOptions: { mapline: { showInLegend: false, enableMouseTracking: false } },
+				series: [
+					{ mapData: countiesMap,	data: data,	joinBy: ['hc-key', 'code'],	name: '% Alerts', tooltip: { valueSuffix: '%' }, borderWidth: 0.5, states: { hover: { color: '#a4edba' } } }, 
+					{ type: 'mapline', name: 'State borders', data: [lines[0]], color: 'white' }, 
+					{ type: 'mapline', name: 'Separator', data: [lines[1]],	color: 'gray' }
+				]
+			};
+			// Instanciate the map
+			$('#geoChart1').highcharts('Map', options);
+		});
+
+		$.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=us-counties-unemployment.json&callback=?', function (data) {
+			var countiesMap = Highcharts.geojson(Highcharts.maps['countries/us/us-all-all']), lines = Highcharts.geojson(Highcharts.maps['countries/us/us-all-all'], 'mapline'), options;
+			// Add state acronym for tooltip
+			Highcharts.each(countiesMap, function (mapPoint) {
+				mapPoint.name = mapPoint.name + ', ' + mapPoint.properties['hc-key'].substr(3, 2).toUpperCase();
+			});
+			options = {
+				chart: { marginBottom: 125 /* for the legend*/ },
+				credits: false,
+				title: { text: 'Percentage of Accounts with a SAR' },
+				legend: {
+					title: { text: '% Accounts with a SAR', style: { color: (Highcharts.theme && Highcharts.theme.textColor) || 'black' } },
+					layout: 'horizontal',  floating: true, valueDecimals: 0, valueSuffix: '%',
+					backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || 'rgba(255, 255, 255, 0.85)', symbolRadius: 0, symbolHeight: 14
+				},
+				mapNavigation: { enabled: true, enableButtons: false },
+				colorAxis: {dataClasses: [{ from: 0, to: 4, color: "silver" },{ from: 4, to: 8, color: "yellowgreen" },{ from: 8, to: 10, color: "teal" },{ from: 10, color: "darkgreen" }]},
+				plotOptions: { mapline: { showInLegend: false, enableMouseTracking: false } },
+				series: [
+					{ mapData: countiesMap,	data: data,	joinBy: ['hc-key', 'code'],	name: '% SARs', tooltip: { valueSuffix: '%' }, borderWidth: 0.5, states: { hover: { color: '#a4edba' } } }, 
+					{ type: 'mapline', name: 'State borders', data: [lines[0]], color: 'white' }, 
+					{ type: 'mapline', name: 'Separator', data: [lines[1]],	color: 'gray' }
+				]
+			};
+			// Instanciate the map
+			$('#geoChart2').highcharts('Map', options);
+		}); 
+		// END map of alerts
+
+
+		// ALERT PRIORTIZATION
+		axios.get("/alertPriorities").then((response)=>{
+			$('#alertPrioritization').DataTable( {
+				"scrollY": "300px",
+				"scrollCollapse": true,
+				"paging": false,
+				data: response.data,
+				columns: [
+					{ title: "Alert ID" },
+					{ title: "Confidence Level" },
+					{ title: "Client Name" },
+					{ title: "Location" },
+					{ title: "Activity Type" },
+					{ title: "Alert Date" },
+					{ title: "Client ID" }
+					//{ title: "Assignment Status" }
+				]
+			} );
+		}).catch((err)=>console.log(err));
+		// END PRIORTIZATION
+		
+
+		// ALERT PRIORTIZATION PIE
+		Highcharts.chart('#alertPrioritizationPie', {
+			chart: { plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, type: 'pie', spacingBottom: 0, spacingTop: -50 },
+			credits: { enabled: false },
+			title: { text: null },
+			legend: { align: 'right', verticalAlign: 'top', layout: 'vertical', y: 200 },
+			tooltip: { pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>' },
+			colors: ['crimson', 'gold', 'yellowgreen'],
+			plotOptions: {
+				pie: { 
+					allowPointSelect: true, 
+					cursor: 'pointer', 
+					dataLabels: { enabled: false },
+					showInLegend: true,
+					size: '75%',
+					innerSize: '65%',
+				}
+			},
+			series: [{
+				name: 'Confidence Level', colorByPoint: true, data: [
+					{ name: 'Over 75% Confidence', y: 10 },
+					{ name: 'Between 25% to 75% Confidence', y: 60 },
+					{ name: 'Under 25% Confidence', y: 30 }
+				]
+			}]
+		});
+		// END ALERT PRIORTIZATION PIE
+	</script>
+</body>
+</html>
