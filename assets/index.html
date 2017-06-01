@@ -42,9 +42,7 @@
 	<div class="jumbotron text-center">
 		<div class="row">
 			<h1>BSA & AML Workstation</h1>
-			<h3>
-				A proof of concept developed for the Center of Excellence BSA and AML project. This Workstation is a modular developed application designed to explore data around BSA & AML Alerts, Cases, and SARs. Data on this workstation is loaded from a remote source by an API.
-			</h3>
+			<h3>A proof of concept developed for the Center of Excellence BSA and AML project. This Workstation is a modular developed application designed to explore data around BSA & AML Alerts, Cases, and SARs. Data on this workstation is loaded from a remote source by an API.</h3>
 			<br>
 			<a href="#alertPriority" id="jumboButton" class="button alert large"> Explore </a>
 		</div>
@@ -268,7 +266,6 @@
 			})); 
 		}).catch((err)=>console.log(err));
 
-
 		/* 
 		*  Instanciate the map 
 		*  Data parsed from http://www.bls.gov/lau/#tables 
@@ -330,7 +327,6 @@
 		}); 
 		// END map of alerts
 
-
 		// ALERT PRIORTIZATION
 		axios.get("/alertPriorities").then((response)=>{
 			$('#alertPrioritization').DataTable( {
@@ -352,7 +348,6 @@
 		}).catch((err)=>console.log(err));
 		// END PRIORTIZATION
 		
-
 		// ALERT PRIORTIZATION PIE
 		Highcharts.chart('#alertPrioritizationPie', {
 			chart: { plotBackgroundColor: null, plotBorderWidth: null, plotShadow: false, type: 'pie', spacingBottom: 0, spacingTop: -50 },
